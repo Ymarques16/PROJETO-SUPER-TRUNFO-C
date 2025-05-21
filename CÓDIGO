@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+#define NUM_CARTAS 4
+
+typedef struct {
+    char nome[30];
+    int populacao;   
+    int area;        
+    int pib;         
+    float idh;       
+} Carta;
+
+void mostrarCarta(Carta c) {
+    printf("\nPaís: %s\n", c.nome);
+    printf("1. População: %d milhões\n", c.populacao);
+    printf("2. Área: %d mil km²\n", c.area);
+    printf("3. PIB per capita: %d mil dólares\n", c.pib);
+    printf("4. IDH: %.3f\n", c.idh);
+}
+
+int compararAtributo(Carta jogador, Carta maquina, int atributo) {
+    switch (atributo) {
+        case 1: return jogador.populacao > maquina.populacao;
+        case 2: return jogador.area > maquina.area;
+        case 3: return jogador.pib > maquina.pib;
+        case 4: return jogador.idh > maquina.idh;
+        default: return -1;
+    }
+}
+
+int main() {
+    srand(time(NULL));
+
+    Carta cartas[NUM_CARTAS] = {
+        {"Brasil", 213, 8516, 9, 0.754},
+        {"Estados Unidos", 331, 9834, 65, 0.921},
+        {"Índia", 1390, 3287, 2, 0.633},
+        {"Noruega", 5, 385, 75, 0.961}
+    };
+
+    int cartaJogador = rand() % NUM_CARTAS;
+    int cartaMaquina;
+    do {
+        cartaMaquina = rand() % NUM_CARTAS;
+    } while (cartaJogador == cartaMaquina);
+
+    printf("Sua carta é:");
+    mostrarCarta(cartas[cartaJogador]);
+
+    int escolha;
+    printf("\nEscolha o atributo para jogar (1-4): ");
+    scanf("%d", &escolha);
+
+    printf("\nCarta da máquina:");
+    mostrarCarta(cartas[cartaMaquina]);
+
+    int resultado = compararAtributo(cartas[cartaJogador], cartas[cartaMaquina], escolha);
+
+    if (resultado == 1)
+        printf("\nVocê venceu!\n");
+    else if (resultado == 0)
+        printf("\nVocê perdeu.\n");
+    else
+        printf("\nAtributo inválido.\n");
+
+    return 0;
+}
